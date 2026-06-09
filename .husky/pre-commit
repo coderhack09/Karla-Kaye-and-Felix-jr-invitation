@@ -1,0 +1,3 @@
+#!/bin/sh
+# Intentionally empty — images are no longer synced to Cloudinary on commit.
+# To sync manually: pnpm run sync:cloudinary
