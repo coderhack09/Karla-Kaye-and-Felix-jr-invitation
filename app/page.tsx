@@ -70,7 +70,7 @@ export default function Home() {
   return (
       <div
         className={`relative min-h-screen overflow-hidden font-sans text-charcoal selection:bg-birch selection:text-nut ${
-          enableDecor ? "bg-transparent" : "bg-[#0F1C3F]"
+          enableDecor ? "bg-transparent" : "bg-[#368BC1]"
         }`}
       >
         {enableDecor && (
@@ -78,7 +78,7 @@ export default function Home() {
             <Silk
               speed={5}
               scale={1.1}
-              color="#0F1C3F"
+              color="#368BC1"
               noiseIntensity={0.8}
               rotation={0.3}
             />
@@ -106,7 +106,7 @@ export default function Home() {
               {/* <Gallery /> */}
               <VideoMessage />
               <Messages />
-              {/* <Details /> */}
+              <Details />
               {/* <GuestInformation /> */}
               {/* <WeddingPlaylist /> */}
               <Entourage />

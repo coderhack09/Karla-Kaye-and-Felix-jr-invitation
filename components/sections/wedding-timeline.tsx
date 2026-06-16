@@ -55,7 +55,7 @@ function buildTimelineEvents(siteConfig: SiteConfig): TimelineEvent[] {
 
   return [
   {
-    time: `1:30 PM`,
+    time: `1:00 PM`,
     title: "Guest Arrival",
     // description: "Guests are kindly requested to arrive and be seated.Our wedding ceremony will begin promptly at 2:00 PM. To preserve the solemnity of the occasion, we ask that everyone be seated at 1:30pm before the ceremony begins.",
     location: `${siteConfig.ceremony.location}`,
@@ -63,7 +63,7 @@ function buildTimelineEvents(siteConfig: SiteConfig): TimelineEvent[] {
     imageSrc: "/weddingtimeline/arrivalimage.png",
   },  
   {
-    time: `2:00 PM`,
+    time: `1:30 PM`,
     title: "Wedding Ceremony",
     location: `${siteConfig.ceremony.location}`,
     icon: RingsIcon,
@@ -97,13 +97,13 @@ function buildTimelineEvents(siteConfig: SiteConfig): TimelineEvent[] {
     icon: DinnerIcon,
     imageSrc: "/weddingtimeline/DinnerService.png",
   },
-  {
-    time: "9:00 PM",
-    title: "Party",
-    location: receptionVenue,
-    icon: DanceIcon,
-    imageSrc: "/weddingtimeline/SendOff.png",
-  },
+  // {
+  //   time: "9:00 PM",
+  //   title: "Party",
+  //   location: receptionVenue,
+  //   icon: DanceIcon,
+  //   imageSrc: "/weddingtimeline/SendOff.png",
+  // },
 ]
 }
 

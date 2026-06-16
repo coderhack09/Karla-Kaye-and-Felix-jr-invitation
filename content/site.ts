@@ -10,7 +10,7 @@ export const siteConfig = {
     groom: "Engr. Felix Marturillas Jr", //Ltryl B. Benitez
     groomNickname: "Felix",
     monogram:"/monogram/new-monogram.png" ,//Ltryl
-    backgroundMusic:"/background_music/PALAGI (Wedding Version) - TJ Monterde  OFFICIAL AUDIO.mp3"
+    backgroundMusic:"/background_music/Michal Leah - The Way I Love You.mp3"
   },
   googleAPI:{
     messageForm: "https://docs.google.com/forms/d/e/1FAIpQLSdddDGJNsAf2bKrOBayXhrd0Tpe8HWA9xskqf-lizr6qngS4A/formResponse",   //done
@@ -26,8 +26,8 @@ export const siteConfig = {
   },
   wedding: {
     date: "April 11, 2027",
-    time: "2:00 PM",
-    venue: "",
+    time: "1:30 PM",
+    venue: "Chapel of San Pedro Calungsod, SRP, Cebu City",
     tagline: "are getting married!",
     theme: "Our wedding palette is inspired by timeless elegance and warmth.Motif Colors: Champagne Gold, Soft Beige, Warm Soft Brown",
     motif: "#BBCED5, #B9C3A8, #F3D8C5, #D1C4D4, #ECD8BA, #F4E8D8, #E1DCCF",
@@ -65,24 +65,24 @@ export const siteConfig = {
     }
   },
   ceremony: {
-    location: "",
-    venue: "",
-    map: "https://maps.app.goo.gl/c7jCXMkPfqfU2txe6",
+    location: "Chapel of San Pedro Calungsod, SRP, Cebu City",
+    venue: "Chapel of San Pedro Calungsod, SRP, Cebu City",
+    map: "https://maps.app.goo.gl/Cs6ASzTrMY5imd1M6",
     date: "April 11, 2027",
     day: "Sunday",
-    time: "3:00 PM",
-    entourageTime: "2:00 PM",
-    guestsTime: "2:30 PM",
-    image: "/Details/ceremony_1.webp",
+    time: "1:30 PM",
+    entourageTime: "12:00 PM",
+    guestsTime: "1:00 PM",
+    image: "/Details/ceremony.png",
   },
   reception: {
-    location: "",
-    venue: "",
-    map: "https://maps.app.goo.gl/13V2x6vJxYe5q3W16",
+    location: "Golden Peak Hotel Gorordo, Cebu City",
+    venue: "Gorordo Avenue, corner N Escario St, Cebu City, 6000 Cebu, Philippines",
+    map: "https://maps.app.goo.gl/eM9AcEfj3Z8g1JW8A",
     date: "April 11, 2027",
     day: "Sunday",
     time: "5:30 PM",
-    image: ["/Details/recepton_1.webp","/Details/reception_2.webp"],
+    image: ["/Details/reception1.png","/Details/reception2.png"],
   },
   dressCode: {
       theme: "SEMI-FORMAL",

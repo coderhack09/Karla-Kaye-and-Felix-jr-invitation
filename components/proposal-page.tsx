@@ -416,7 +416,7 @@ export function ProposalPage({ role }: ProposalPageProps) {
           <Silk
             speed={5}
             scale={1.1}
-            color="#0F1C3F"
+            color="#368BC1"
             noiseIntensity={0.8}
             rotation={0.3}
           />
