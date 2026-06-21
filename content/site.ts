@@ -34,7 +34,7 @@ export const siteConfig = {
   },
   proposal: {
     // Use "Maid of Honor" for unmarried, "Matron of Honor" for married
-    honorAttendant: "Matron of Honor" as "Matron of Honor" | "Maid of Honor",
+    honorAttendant: "Maid of Honor" as "Matron of Honor" | "Maid of Honor",
     roles: proposalRoleDefinitions,
     roleIdAliases: proposalRoleIdAliases,
   },
