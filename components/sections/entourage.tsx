@@ -123,6 +123,7 @@ const ROLE_CATEGORY_ORDER = [
   "Matron of Honor",
   "Best Man",
   "Maid of Honor",
+  "Bride squad",
   "Candle Sponsors",
   "Veil Sponsors",
   "Cord Sponsors",
@@ -144,6 +145,32 @@ function normalizeRoleCategory(category: string): string {
     return "OFFICIATING MINISTER"
   }
   return normalized
+}
+
+/** Preserve sheet order for unknown categories; known categories follow ROLE_CATEGORY_ORDER. */
+function buildCategoryOrder(
+  members: EntourageMember[],
+  grouped: Record<string, EntourageMember[]>
+): string[] {
+  const firstSeen = new Map<string, number>()
+  members.forEach((member, index) => {
+    const category = normalizeRoleCategory(member.roleCategory)
+    if (!category || category === "Other") return
+    if (!firstSeen.has(category)) firstSeen.set(category, index)
+  })
+
+  const categories = Object.keys(grouped).filter(
+    (cat) => cat && cat !== "Other" && !HIDDEN_ROLE_CATEGORIES.has(cat)
+  )
+
+  return categories.sort((a, b) => {
+    const aKnown = ROLE_CATEGORY_ORDER.indexOf(a)
+    const bKnown = ROLE_CATEGORY_ORDER.indexOf(b)
+    if (aKnown >= 0 && bKnown >= 0) return aKnown - bKnown
+    if (aKnown >= 0) return -1
+    if (bKnown >= 0) return 1
+    return (firstSeen.get(a) ?? 0) - (firstSeen.get(b) ?? 0)
+  })
 }
 
 /** Title case per word; uses Unicode letters so ñe → Ñe (not ñE from ASCII-only `/\b\w/g`). */
@@ -171,11 +198,12 @@ export function Entourage() {
       const response = await fetch("/api/entourage", { cache: "no-store" })
       if (!response.ok) throw new Error("Failed to fetch entourage")
       const data: unknown = await response.json()
-      const list =
-        Array.isArray(data) && data.length > 0
-          ? data.map((row) => entourageMemberFromApi(row as Record<string, unknown>))
-          : mapStaticEntourage()
-      setEntourage(list)
+      const list = Array.isArray(data)
+        ? data
+            .map((row) => entourageMemberFromApi(row as Record<string, unknown>))
+            .filter((m) => m.name.trim())
+        : mapStaticEntourage()
+      setEntourage(list.length > 0 ? list : mapStaticEntourage())
     } catch (err: unknown) {
       console.error("Failed to load entourage:", err)
       setEntourage(mapStaticEntourage())
@@ -242,25 +270,28 @@ export function Entourage() {
     }
   }, [])
 
-  // Group entourage by role category
+  // Group entourage by RoleCategory from Google Sheets (preserve API row order within each group)
   const grouped = useMemo(() => {
     const grouped: Record<string, EntourageMember[]> = {}
-    
-    entourage.forEach((member) => {
-      const category = normalizeRoleCategory(member.roleCategory)
 
-      // Skip members without a category or in "Other"
-      if (!category || category === "Other") {
-        return
-      }
-      if (!grouped[category]) {
-        grouped[category] = []
-      }
+    entourage.forEach((member) => {
+      const name = member.name?.trim()
+      if (!name) return
+
+      const category = normalizeRoleCategory(member.roleCategory) || "Uncategorized"
+      if (category === "Other") return
+
+      if (!grouped[category]) grouped[category] = []
       grouped[category].push(member)
     })
-    
+
     return grouped
   }, [entourage])
+
+  const categoryOrder = useMemo(
+    () => buildCategoryOrder(entourage, grouped),
+    [entourage, grouped]
+  )
 
   const hasParents =
     (grouped["Parents of the Groom"]?.length ?? 0) > 0 || (grouped["Parents of the Bride"]?.length ?? 0) > 0
@@ -491,11 +522,29 @@ export function Entourage() {
               </div>
             ) : (
             <>
-              {ROLE_CATEGORY_ORDER.map((category, categoryIndex) => {
+              {categoryOrder.map((category, categoryIndex) => {
                 const members = grouped[category] || []
                 
                 if (members.length === 0) return null
                 if (HIDDEN_ROLE_CATEGORIES.has(category)) return null
+
+                // Bride squad and similar API categories — single section from Google Sheet
+                if (category === "Bride squad") {
+                  return (
+                    <div key={category}>
+                      {categoryIndex > 0 && <SectionDivider />}
+                      <TwoColumnLayout singleTitle="Bride Squad" centerContent={true}>
+                        <div className="col-span-full">
+                          <div className="max-w-sm mx-auto flex flex-col items-center gap-1 sm:gap-1.5 md:gap-2">
+                            {members.map((member, idx) => (
+                              <NameItem key={`${category}-${idx}-${member.name}`} member={member} align="center" />
+                            ))}
+                          </div>
+                        </div>
+                      </TwoColumnLayout>
+                    </div>
+                  )
+                }
 
                 // Render OFFICIATING MINISTER directly above Principal Sponsors (in Parents block)
                 if (category === "OFFICIATING MINISTER" && hasParents) return null
@@ -696,7 +745,7 @@ export function Entourage() {
                         {categoryIndex > 0 && (
                           <SectionDivider />
                         )}
-                        <TwoColumnLayout leftTitle="Best Men" rightTitle="Maid & Matron">
+                        <TwoColumnLayout leftTitle="Best Man" rightTitle="Maid of Honor">
                           {(() => {
                             const maxLen = Math.max(bestMan.length, maidOfHonor.length)
                             const rows = []
@@ -904,54 +953,6 @@ export function Entourage() {
                           )
                         }
                         // Default two-column sections: render row-by-row pairs to keep alignment on small screens
-                        const half = Math.ceil(members.length / 2)
-                        const left = members.slice(0, half)
-                        const right = members.slice(half)
-                        const maxLen = Math.max(left.length, right.length)
-                        const rows = []
-                        for (let i = 0; i < maxLen; i++) {
-                          const l = left[i]
-                          const r = right[i]
-                          rows.push(
-                            <React.Fragment key={`${category}-row-${i}`}>
-                              <div key={`${category}-cell-left-${i}`} className="px-1.5 sm:px-2 md:px-2.5">
-                                {l ? <NameItem member={l} align="right" /> : <div className="py-0.5 sm:py-1 md:py-1.5" />}
-                              </div>
-                              <div key={`${category}-cell-right-${i}`} className="px-1.5 sm:px-2 md:px-2.5">
-                                {r ? <NameItem member={r} align="left" /> : <div className="py-0.5 sm:py-1 md:py-1.5" />}
-                              </div>
-                            </React.Fragment>
-                          )
-                        }
-                        return rows
-                      })()}
-                    </TwoColumnLayout>
-                  </div>
-                )
-              })}
-              
-              {/* Display any other categories not in the ordered list */}
-              {Object.keys(grouped).filter(cat => !ROLE_CATEGORY_ORDER.includes(cat) && cat !== "Other").map((category) => {
-                const members = grouped[category]
-                return (
-                  <div key={category}>
-                    <div className="flex justify-center py-3 sm:py-4 md:py-5 mb-5 sm:mb-6 md:mb-8">
-
-                    </div>
-                    <TwoColumnLayout singleTitle={category} centerContent={true}>
-                      {(() => {
-                        if (members.length <= 2) {
-                          return (
-                            <div className="col-span-full">
-                              <div className="max-w-sm mx-auto flex flex-col items-center gap-1 sm:gap-1.5 md:gap-2">
-                                {members.map((member, idx) => (
-                                  <NameItem key={`${category}-${idx}-${member.name}`} member={member} align="center" />
-                                ))}
-                              </div>
-                            </div>
-                          )
-                        }
-                        // Pair row-by-row for other categories as well
                         const half = Math.ceil(members.length / 2)
                         const left = members.slice(0, half)
                         const right = members.slice(half)

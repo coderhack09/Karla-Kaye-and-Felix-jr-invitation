@@ -140,7 +140,7 @@ Now, as they prepare to say yes before God and the people they love most, Cather
   playlist: {
     title: "A Playlist from our hearts",
     subtitle: "Songs that have been part of our journey together",
-    playlistName: "PJ & Nicole Wedding",
+    playlistName: "PJ & Nicolette Wedding",
     embedUrl:
       "https://open.spotify.com/embed/playlist/2FUZHCJs6Z5iBvP0rKvQdu?utm_source=generator",
     spotifyUrl: "https://open.spotify.com/playlist/2FUZHCJs6Z5iBvP0rKvQdu",
@@ -149,7 +149,7 @@ Now, as they prepare to say yes before God and the people they love most, Cather
     googleDriveLink:
       "https://weduploader.com/upload/x2kqPwdYOMbQ5Dto?utm_source=site&utm_medium=qrcode&utm_campaign=dashboard&utm_content=x2kqPwdYOMbQ5Dto",
     albumQR: "/QR/AlbumQR.png",
-    hashtag: ["#KaysChapterWithFelix"],
+    hashtag: ["##KalexToForever"],
     instructions: "Please scan this QR Code and upload the photos and videos you have taken during our wedding reception. We are delighted to see your snaps too!",
   },
 }
